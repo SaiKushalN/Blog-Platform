@@ -1,0 +1,107 @@
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Main Footer Content -->
+    <div class="footer-content">
+      <!-- Platform Info -->
+      <div class="footer-section">
+        <div class="footer-brand">
+          <mat-icon class="footer-logo">article</mat-icon>
+          <h3 class="footer-title">Blog Platform</h3>
+        </div>
+        <p class="footer-description">
+          A modern platform for writers to share their stories and connect with readers worldwide.
+        </p>
+        <div class="footer-social">
+          <a 
+            *ngFor="let social of footerLinks.social"
+            [href]="social.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+            [attr.aria-label]="social.label">
+            <mat-icon>{{ social.icon }}</mat-icon>
+          </a>
+        </div>
+      </div>
+
+      <!-- Platform Links -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Platform</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of footerLinks.platform">
+            <a 
+              (click)="navigateTo(link.route)"
+              class="footer-link">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Resources Links -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Resources</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of footerLinks.resources">
+            <a 
+              (click)="navigateTo(link.route)"
+              class="footer-link">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Newsletter Signup -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Stay Updated</h4>
+        <p class="footer-description">
+          Get the latest updates and writing tips delivered to your inbox.
+        </p>
+        <div class="newsletter-form">
+          <mat-form-field appearance="outline" class="newsletter-input">
+            <mat-label>Email address</mat-label>
+            <input 
+              matInput
+              type="email"
+              placeholder="Enter your email">
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+          <button 
+            mat-raised-button
+            color="primary"
+            class="newsletter-button">
+            Subscribe
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="copyright">
+          <p>&copy; {{ getCurrentYear() }} Blog Platform. All rights reserved.</p>
+        </div>
+        
+        <div class="footer-bottom-links">
+          <a 
+            (click)="navigateTo('/privacy')"
+            class="footer-bottom-link">
+            Privacy
+          </a>
+          <a 
+            (click)="navigateTo('/terms')"
+            class="footer-bottom-link">
+            Terms
+          </a>
+          <a 
+            (click)="navigateTo('/cookies')"
+            class="footer-bottom-link">
+            Cookies
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

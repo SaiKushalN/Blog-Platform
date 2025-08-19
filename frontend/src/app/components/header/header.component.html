@@ -1,0 +1,182 @@
+<header class="header" [class.scrolled]="isScrolled">
+  <div class="header-container">
+    <!-- Logo and Brand -->
+    <div class="header-brand">
+      <button 
+        class="sidebar-toggle"
+        (click)="onToggleSidebar()"
+        aria-label="Toggle sidebar">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <a routerLink="/" class="brand-logo">
+        <mat-icon class="logo-icon">article</mat-icon>
+        <span class="brand-text">Blog Platform</span>
+      </a>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="header-nav" [class.hidden]="isSearchOpen">
+      <a 
+        routerLink="/" 
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+        class="nav-link">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </a>
+      
+      <a 
+        routerLink="/posts" 
+        routerLinkActive="active"
+        class="nav-link">
+        <mat-icon>article</mat-icon>
+        <span>Posts</span>
+      </a>
+      
+      <a 
+        routerLink="/search" 
+        routerLinkActive="active"
+        class="nav-link">
+        <mat-icon>search</mat-icon>
+        <span>Search</span>
+      </a>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="header-search" [class.open]="isSearchOpen">
+      <div class="search-container">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input 
+            matInput
+            id="search-input"
+            [(ngModel)]="searchQuery"
+            placeholder="Search posts, tags, authors..."
+            (keydown)="onSearchKeydown($event)"
+            (blur)="closeSearch()">
+          <button 
+            matSuffix 
+            mat-icon-button
+            (click)="onSearch()"
+            aria-label="Search">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+        
+        <button 
+          class="search-close"
+          (click)="closeSearch()"
+          aria-label="Close search">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions" [class.hidden]="isSearchOpen">
+      <!-- Search Toggle -->
+      <button 
+        class="action-button search-toggle"
+        (click)="openSearch()"
+        aria-label="Open search">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <!-- Create Post Button -->
+      <button 
+        *ngIf="canCreatePost()"
+        class="action-button create-post"
+        (click)="createPost()"
+        mat-raised-button
+        color="primary">
+        <mat-icon>add</mat-icon>
+        <span class="button-text">New Post</span>
+      </button>
+
+      <!-- User Menu -->
+      <div *ngIf="isAuthenticated; else authButtons" class="user-menu">
+        <!-- Notifications -->
+        <button 
+          class="action-button notifications"
+          [matBadge]="unreadNotifications"
+          matBadgeColor="warn"
+          matBadgeSize="small"
+          aria-label="Notifications">
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+        <!-- User Avatar -->
+        <button 
+          class="user-avatar"
+          [matMenuTriggerFor]="userMenu"
+          aria-label="User menu">
+          <div class="avatar-content">
+            <img 
+              *ngIf="currentUser?.avatar" 
+              [src]="currentUser.avatar" 
+              [alt]="getUserDisplayName()"
+              class="avatar-image">
+            <div 
+              *ngIf="!currentUser?.avatar" 
+              class="avatar-initials">
+              {{ getUserInitials() }}
+            </div>
+          </div>
+        </button>
+
+        <!-- User Dropdown Menu -->
+        <mat-menu #userMenu="matMenu" class="user-dropdown">
+          <div class="user-info">
+            <div class="user-name">{{ getUserDisplayName() }}</div>
+            <div class="user-email">{{ currentUser?.email }}</div>
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <button mat-menu-item (click)="goToProfile()">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          
+          <button 
+            *ngIf="canAccessAdmin()"
+            mat-menu-item 
+            (click)="goToAdmin()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Admin</span>
+          </button>
+          
+          <mat-divider></mat-divider>
+          
+          <button mat-menu-item (click)="onLogout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- Authentication Buttons -->
+      <ng-template #authButtons>
+        <div class="auth-buttons">
+          <a 
+            routerLink="/login" 
+            class="action-button login"
+            mat-button>
+            <mat-icon>login</mat-icon>
+            <span class="button-text">Login</span>
+          </a>
+          
+          <a 
+            routerLink="/register" 
+            class="action-button register"
+            mat-raised-button
+            color="accent">
+            <mat-icon>person_add</mat-icon>
+            <span class="button-text">Sign Up</span>
+          </a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</header>

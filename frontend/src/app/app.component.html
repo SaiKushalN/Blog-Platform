@@ -1,0 +1,47 @@
+<div class="app-container" (keydown)="onKeyDown($event)">
+  <!-- Loading overlay -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading Blog Platform...</p>
+  </div>
+
+  <!-- Main app content -->
+  <div class="app-content" [class.loaded]="!isLoading">
+    <!-- Header -->
+    <app-header 
+      [isAuthenticated]="isAuthenticated"
+      [currentUser]="currentUser"
+      (logout)="onLogout()"
+      (toggleSidebar)="toggleSidebar()">
+    </app-header>
+
+    <!-- Main layout -->
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <app-sidebar 
+        *ngIf="showSidebar"
+        [isAuthenticated]="isAuthenticated"
+        [currentUser]="currentUser"
+        (close)="onSidebarClose()">
+      </app-sidebar>
+
+      <!-- Main content area -->
+      <main class="main-content" [class.sidebar-open]="showSidebar">
+        <!-- Router outlet for page content -->
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <app-footer></app-footer>
+  </div>
+
+  <!-- Global error message component -->
+  <app-error-message></app-error-message>
+
+  <!-- Global loading spinner -->
+  <app-loading-spinner></app-loading-spinner>
+
+  <!-- Toast notifications -->
+  <div class="toast-container"></div>
+</div>

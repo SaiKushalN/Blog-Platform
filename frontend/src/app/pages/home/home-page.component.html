@@ -1,0 +1,249 @@
+<div class="home-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">{{ welcomeMessage }}</h1>
+        <p class="hero-subtitle">{{ subtitleMessage }}</p>
+        
+        <div class="hero-actions">
+          <button 
+            *ngIf="canCreatePost"
+            (click)="onCreatePost()"
+            mat-raised-button
+            color="primary"
+            class="hero-button primary">
+            <mat-icon>add</mat-icon>
+            Start Writing
+          </button>
+          
+          <button 
+            (click)="onViewAllPosts()"
+            mat-stroked-button
+            color="primary"
+            class="hero-button secondary">
+            <mat-icon>explore</mat-icon>
+            Explore Posts
+          </button>
+        </div>
+      </div>
+      
+      <div class="hero-image">
+        <mat-icon class="hero-icon">article</mat-icon>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading amazing content...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-section">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h3>Oops! Something went wrong</h3>
+    <p>{{ error }}</p>
+    <button 
+      (click)="retry()"
+      mat-raised-button
+      color="primary">
+      Try Again
+    </button>
+  </div>
+
+  <!-- Content Sections -->
+  <div *ngIf="!isLoading && !error" class="content-sections">
+    <!-- Featured Posts Section -->
+    <section *ngIf="featuredPosts.length > 0" class="content-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <mat-icon class="section-icon">star</mat-icon>
+          Featured Posts
+        </h2>
+        <p class="section-subtitle">Handpicked content from our community</p>
+      </div>
+      
+      <div class="posts-grid featured-grid">
+        <div 
+          *ngFor="let post of featuredPosts"
+          class="post-card featured-post"
+          (click)="onPostClick(post)">
+          <div class="post-image" *ngIf="post.featuredImage">
+            <img [src]="post.featuredImage" [alt]="post.title">
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-author">{{ post.author.username }}</span>
+              <span class="post-date">{{ post.publishedAt | date:'mediumDate' }}</span>
+            </div>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            <div class="post-footer">
+              <div class="post-tags">
+                <span 
+                  *ngFor="let tag of post.tags.slice(0, 3)"
+                  class="post-tag">
+                  {{ tag }}
+                </span>
+              </div>
+              <div class="post-stats">
+                <span class="post-views">
+                  <mat-icon>visibility</mat-icon>
+                  {{ post.views }}
+                </span>
+                <span class="post-likes">
+                  <mat-icon>favorite</mat-icon>
+                  {{ post.likes.length }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Posts Section -->
+    <section *ngIf="recentPosts.length > 0" class="content-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <mat-icon class="section-icon">schedule</mat-icon>
+          Recent Posts
+        </h2>
+        <p class="section-subtitle">Fresh content from our writers</p>
+      </div>
+      
+      <div class="posts-grid recent-grid">
+        <div 
+          *ngFor="let post of recentPosts"
+          class="post-card recent-post"
+          (click)="onPostClick(post)">
+          <div class="post-image" *ngIf="post.featuredImage">
+            <img [src]="post.featuredImage" [alt]="post.title">
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-author">{{ post.author.username }}</span>
+              <span class="post-date">{{ post.publishedAt | date:'shortDate' }}</span>
+            </div>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            <div class="post-footer">
+              <div class="post-tags">
+                <span 
+                  *ngFor="let tag of post.tags.slice(0, 2)"
+                  class="post-tag">
+                  {{ tag }}
+                </span>
+              </div>
+              <div class="post-stats">
+                <span class="post-read-time">
+                  <mat-icon>access_time</mat-icon>
+                  {{ post.readTime }} min read
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section-footer">
+        <button 
+          (click)="onViewAllPosts()"
+          mat-stroked-button
+          color="primary">
+          View All Posts
+        </button>
+      </div>
+    </section>
+
+    <!-- Popular Posts Section -->
+    <section *ngIf="popularPosts.length > 0" class="content-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <mat-icon class="section-icon">trending_up</mat-icon>
+          Popular Posts
+        </h2>
+        <p class="section-subtitle">Most loved content this week</p>
+      </div>
+      
+      <div class="posts-grid popular-grid">
+        <div 
+          *ngFor="let post of popularPosts"
+          class="post-card popular-post"
+          (click)="onPostClick(post)">
+          <div class="post-image" *ngIf="post.featuredImage">
+            <img [src]="post.featuredImage" [alt]="post.title">
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-author">{{ post.author.username }}</span>
+              <span class="post-date">{{ post.publishedAt | date:'shortDate' }}</span>
+            </div>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            <div class="post-footer">
+              <div class="post-tags">
+                <span 
+                  *ngFor="let tag of post.tags.slice(0, 2)"
+                  class="post-tag">
+                  {{ tag }}
+                </span>
+              </div>
+              <div class="post-stats">
+                <span class="post-views">
+                  <mat-icon>visibility</mat-icon>
+                  {{ post.views }}
+                </span>
+                <span class="post-likes">
+                  <mat-icon>favorite</mat-icon>
+                  {{ post.likes.length }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Ready to share your story?</h2>
+        <p>Join our community of writers and start creating amazing content today.</p>
+        
+        <div class="cta-actions">
+          <button 
+            *ngIf="!isAuthenticated"
+            routerLink="/register"
+            mat-raised-button
+            color="accent"
+            class="cta-button">
+            <mat-icon>person_add</mat-icon>
+            Get Started
+          </button>
+          
+          <button 
+            *ngIf="isAuthenticated && canCreatePost"
+            (click)="onCreatePost()"
+            mat-raised-button
+            color="primary"
+            class="cta-button">
+            <mat-icon>add</mat-icon>
+            Write Your First Post
+          </button>
+          
+          <button 
+            routerLink="/posts"
+            mat-stroked-button
+            color="primary"
+            class="cta-button secondary">
+            <mat-icon>explore</mat-icon>
+            Explore More
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

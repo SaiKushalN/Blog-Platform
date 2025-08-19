@@ -1,0 +1,176 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+}
+
+// Loading overlay
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  
+  p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+// Main app content
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  
+  &.loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Main layout
+.main-layout {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+// Main content area
+.main-content {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+  
+  &.sidebar-open {
+    margin-left: 280px;
+    
+    @media (max-width: 768px) {
+      margin-left: 0;
+    }
+  }
+}
+
+// Toast container
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  pointer-events: none;
+  
+  .toast {
+    pointer-events: auto;
+    margin-bottom: 10px;
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .main-content {
+    &.sidebar-open {
+      margin-left: 250px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+    
+    &.sidebar-open {
+      margin-left: 0;
+    }
+  }
+  
+  .loading-overlay {
+    p {
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 8px;
+  }
+  
+  .loading-overlay {
+    p {
+      font-size: 14px;
+      text-align: center;
+      padding: 0 20px;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .app-container {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  .loading-overlay {
+    background: rgba(18, 18, 18, 0.95);
+    
+    p {
+      color: #e0e0e0;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .loading-overlay,
+  .toast-container,
+  app-header,
+  app-footer,
+  app-sidebar {
+    display: none !important;
+  }
+  
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .app-container {
+    background-color: #000000;
+    color: #ffffff;
+  }
+  
+  .loading-overlay {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ffffff;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .app-content,
+  .main-content,
+  .sidebar-open {
+    transition: none;
+  }
+}
